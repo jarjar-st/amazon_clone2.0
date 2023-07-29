@@ -4,6 +4,8 @@ const bcryptjs = require("bcryptjs");
 
 const authRouter = express.Router();
 
+
+//?Registra usuario
 authRouter.post("/api/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -30,6 +32,16 @@ authRouter.post("/api/signup", async (req, res) => {
     console.log(user);
     res.json(user);
   } catch (e) {
+    res.status(500).json({error: e.message});
+  }
+});
+
+//?Logear usuario
+
+authRouter.post("/api/signin", async (req, res) => {
+  try {
+    const {email, password} = req.body;
+  } catch (error) {
     res.status(500).json({error: e.message});
   }
 });
