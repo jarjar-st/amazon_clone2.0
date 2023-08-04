@@ -6,6 +6,7 @@ import 'package:amazon_clone/constants/utils.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/models/user.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:amazon_clone/providers/user_provider_getx.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
+  final UserController _userController = Get.find<UserController>();
   //?Registro
   void signUpUser({
     required BuildContext context,
@@ -75,7 +77,9 @@ class AuthService {
         onSuccess: () async {
           print('ESTE ES EL RES: ${res.body}');
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+          // Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+          _userController.setUser(res.body);
+
           await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
           Navigator.pushNamedAndRemoveUntil(
             context,
@@ -119,8 +123,10 @@ class AuthService {
             'x-auth-token': token
           },
         );
-        var userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUser(userRes.body);
+        // var userProvider = Provider.of<UserProvider>(context, listen: false);
+        // userProvider.setUser(userRes.body);
+        var userGetx = Get.find<UserController>();
+        userGetx.setUser(userRes.body);
       }
     } catch (e) {
       showSnackBar(context, e.toString());
