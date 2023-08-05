@@ -1,3 +1,4 @@
+import 'package:amazon_clone/common/widgets/botton_bar.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:amazon_clone/providers/user_provider_getx.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final UserController user = Get.find<UserController>();
     print("HOME: ${user.user.toJson()}");
     return Scaffold(
+      // bottomNavigationBar: BottonBar(),
       body: Center(
         child: Text(
           user.user.toJson(),
