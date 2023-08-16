@@ -1,4 +1,5 @@
 import 'package:amazon_clone/constants/global_varaiables.dart';
+import 'package:amazon_clone/features/account/screens/account_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,9 +19,7 @@ class _BottonBarState extends State<BottonBar> {
   double bottonBarBorderWidth = 5;
   List<Widget> pages = [
     const HomeScreen(),
-    const Center(
-      child: Text("Account Page"),
-    ),
+    const AccountScreen(),
     const Center(
       child: Text("Cart Page"),
     ),

@@ -15,7 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final UserController _userController = Get.find<UserController>();
+  // final UserController _userController =
+  //     Get.put<UserController>(UserController());
   //?Registro
   void signUpUser({
     required BuildContext context,
@@ -78,8 +79,8 @@ class AuthService {
         onSuccess: () async {
           print('ESTE ES EL RES: ${res.body}');
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          // Provider.of<UserProvider>(context, listen: false).setUser(res.body);
-          _userController.setUser(res.body);
+          Provider.of<UserProvider>(context, listen: false).setUser(res.body);
+          // _userController.setUser(res.body);
 
           await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
           Navigator.pushNamedAndRemoveUntil(
@@ -124,10 +125,10 @@ class AuthService {
             'x-auth-token': token
           },
         );
-        // var userProvider = Provider.of<UserProvider>(context, listen: false);
-        // userProvider.setUser(userRes.body);
-        var userGetx = Get.find<UserController>();
-        userGetx.setUser(userRes.body);
+        var userProvider = Provider.of<UserProvider>(context, listen: false);
+        userProvider.setUser(userRes.body);
+        // var userGetx = Get.find<UserController>();
+        // userGetx.setUser(userRes.body);
       }
     } catch (e) {
       showSnackBar(context, e.toString());

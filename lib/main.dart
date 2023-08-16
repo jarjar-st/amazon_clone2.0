@@ -12,15 +12,14 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    const MyApp(),
-    // MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(
-    //       create: (context) => UserProvider(),
-    //     ),
-    //   ],
-    //   child: const MyApp(),
-    // ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -32,17 +31,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // final AuthService authService = AuthService();
+  final AuthService authService = AuthService();
+  // final UserController _userController = Get.put(UserController());
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   authService.getUserData(context: context);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    authService.getUserData(context: context);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final UserController _userController = Get.put(UserController());
     return GetMaterialApp(
       initialBinding: AppBindings(),
       title: 'Material App',
@@ -60,11 +59,10 @@ class _MyAppState extends State<MyApp> {
       onGenerateRoute: (settings) {
         return generateRoute(settings);
       },
-      home:
-          // Provider.of<UserProvider>(context).user.token.isNotEmpty
-          _userController.user.token.isNotEmpty
-              ? const BottonBar()
-              : const AuthScreen(),
+      home: Provider.of<UserProvider>(context).user.token.isNotEmpty
+          // _userController.user.token.isNotEmpty
+          ? const BottonBar()
+          : const AuthScreen(),
     );
   }
 }

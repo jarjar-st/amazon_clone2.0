@@ -16,14 +16,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // final user = Provider.of<UserProvider>(context).user;
-    final UserController user = Get.find<UserController>();
-    print("HOME: ${user.user.toJson()}");
+    final user = Provider.of<UserProvider>(context).user;
+    // final UserController user = Get.find<UserController>();
+    // print("HOME: ${user.user.toJson()}");
     return Scaffold(
       // bottomNavigationBar: BottonBar(),
       body: Center(
         child: Text(
-          user.user.toJson(),
+          user.toJson(),
         ),
       ),
     );
