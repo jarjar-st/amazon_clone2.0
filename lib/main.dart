@@ -1,6 +1,7 @@
 import 'package:amazon_clone/bindings.dart';
 import 'package:amazon_clone/common/widgets/botton_bar.dart';
 import 'package:amazon_clone/constants/global_varaiables.dart';
+import 'package:amazon_clone/features/admin/screens/admins_screen.dart';
 import 'package:amazon_clone/features/auth/screens/auth_screen.dart';
 import 'package:amazon_clone/features/auth/services/auth_service.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
@@ -43,6 +44,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       initialBinding: AppBindings(),
       title: 'Material App',
       theme: ThemeData(
@@ -61,7 +63,9 @@ class _MyAppState extends State<MyApp> {
       },
       home: Provider.of<UserProvider>(context).user.token.isNotEmpty
           // _userController.user.token.isNotEmpty
-          ? const BottonBar()
+          ? Provider.of<UserProvider>(context).user.type == "user"
+              ? const BottonBar()
+              : const AdminScreen()
           : const AuthScreen(),
     );
   }
