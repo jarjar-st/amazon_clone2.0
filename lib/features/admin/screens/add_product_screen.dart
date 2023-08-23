@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:amazon_clone/common/widgets/custom_button.dart';
 import 'package:amazon_clone/common/widgets/custom_textfield.dart';
 import 'package:amazon_clone/constants/global_varaiables.dart';
+import 'package:amazon_clone/constants/utils.dart';
+import 'package:amazon_clone/features/admin/services/admin_services.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -22,8 +27,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController productPricreController = TextEditingController();
   final TextEditingController productQuantityController =
       TextEditingController();
+  final AdminServices adminServices = AdminServices();
 
   final category = 'Mobiles'.obs;
+  List<File> images = <File>[].obs;
+  final _addProductFormKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -41,6 +49,29 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Books',
     'Fashion',
   ];
+
+  void sellProduct() {
+    if (_addProductFormKey.currentState!.validate() && images.isNotEmpty) {
+      adminServices.sellProduct(
+        context: context,
+        name: productNameController.text,
+        description: productDescriptionController.text,
+        price: double.parse(productPricreController.text),
+        quantity: double.parse(productQuantityController.text),
+        category: category.value,
+        images: images,
+      );
+    }
+  }
+
+  void selectImages() async {
+    var res = await pickImages();
+    setState(() {
+      images = res;
+    });
+
+    print(images.isNotEmpty);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,47 +95,73 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
         body: SingleChildScrollView(
           child: Form(
+            key: _addProductFormKey,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ResponsiveRowColumn(
                 columnPadding: const EdgeInsets.only(top: 20),
                 layout: ResponsiveRowColumnType.COLUMN,
                 children: [
-                  ResponsiveRowColumnItem(
-                    child: DottedBorder(
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(10),
-                      dashPattern: const [10, 4],
-                      strokeCap: StrokeCap.round,
-                      child: Container(
-                        width: double.infinity,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: ResponsiveRowColumn(
-                          columnMainAxisAlignment: MainAxisAlignment.center,
-                          layout: ResponsiveRowColumnType.COLUMN,
-                          columnSpacing: 15,
-                          children: [
-                            const ResponsiveRowColumnItem(
-                              child: Icon(
-                                Icons.folder_open,
-                                size: 40,
+                  images.isNotEmpty
+                      ? ResponsiveRowColumnItem(
+                          child: CarouselSlider(
+                            items: images.map(
+                              (e) {
+                                return Builder(
+                                  builder: (context) => Image.file(
+                                    e,
+                                    fit: BoxFit.cover,
+                                    height: 200,
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                            options: CarouselOptions(
+                              viewportFraction: 1,
+                              height: 200,
+                            ),
+                          ),
+                        )
+                      : ResponsiveRowColumnItem(
+                          child: GestureDetector(
+                            onTap: selectImages,
+                            child: DottedBorder(
+                              borderType: BorderType.RRect,
+                              radius: const Radius.circular(10),
+                              dashPattern: const [10, 4],
+                              strokeCap: StrokeCap.round,
+                              child: Container(
+                                width: double.infinity,
+                                height: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ResponsiveRowColumn(
+                                  columnMainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                  layout: ResponsiveRowColumnType.COLUMN,
+                                  columnSpacing: 15,
+                                  children: [
+                                    const ResponsiveRowColumnItem(
+                                      child: Icon(
+                                        Icons.folder_open,
+                                        size: 40,
+                                      ),
+                                    ),
+                                    ResponsiveRowColumnItem(
+                                      child: Text(
+                                        "Seleccione Imagenes del Producto",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.grey.shade500),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            ResponsiveRowColumnItem(
-                              child: Text(
-                                "Seleccione Imagenes del Producto",
-                                style: TextStyle(
-                                    fontSize: 15, color: Colors.grey.shade500),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   const ResponsiveRowColumnItem(
                     child: Gap(30),
                   ),
@@ -166,7 +223,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ResponsiveRowColumnItem(
                     child: CustomButton(
                       text: "Vender",
-                      onPressed: () {},
+                      onPressed: sellProduct,
                     ),
                   ),
                 ],

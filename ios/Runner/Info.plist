@@ -47,5 +47,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Is use for product image and video</string>
 </dict>
 </plist>
