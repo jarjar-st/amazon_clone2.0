@@ -22,7 +22,29 @@ adminRouter.post("/admin/add-product", admin, async (req, res) => {
     res.json(product);
   } catch (e) {
     // res.status(500).json({ error: e.message });
-    console.log(`ESTA ES: ${e.message}`);
+  }
+});
+
+adminRouter.get("/admin/get-products", admin, async (req, res) => {
+  try {
+    const products = await Product.find({});
+    console.log("Si hay productos");
+
+    res.json(products);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(e.message);
+  }
+});
+
+adminRouter.post("/admin/delete-products", admin, async (req, res) => {
+  try {
+    const { id } = req.body;
+    let product = await Product.findByIdAndDelete(id);
+    res.json(product);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(e.message);
   }
 });
 
