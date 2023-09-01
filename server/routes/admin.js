@@ -25,6 +25,8 @@ adminRouter.post("/admin/add-product", admin, async (req, res) => {
   }
 });
 
+
+// obtner productos
 adminRouter.get("/admin/get-products", admin, async (req, res) => {
   try {
     const products = await Product.find({});
@@ -37,6 +39,8 @@ adminRouter.get("/admin/get-products", admin, async (req, res) => {
   }
 });
 
+
+// Borrar productos
 adminRouter.post("/admin/delete-products", admin, async (req, res) => {
   try {
     const { id } = req.body;

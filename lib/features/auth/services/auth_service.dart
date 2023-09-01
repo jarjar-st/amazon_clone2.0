@@ -62,6 +62,8 @@ class AuthService {
     required String password,
   }) async {
     try {
+      logger.i("Entra");
+      logger.i(email);
       http.Response res = await http.post(
         Uri.parse('$uri/api/signin'),
         body: jsonEncode({
@@ -72,7 +74,7 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-
+      logger.e(res);
       httpErrorHandle(
         response: res,
         context: context,
@@ -91,6 +93,7 @@ class AuthService {
         },
       );
     } catch (e) {
+      logger.e(e.toString());
       showSnackBar(context, e.toString());
     }
   }

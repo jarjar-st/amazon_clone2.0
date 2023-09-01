@@ -26,6 +26,6 @@ mongoose.connect(DB).then(() => {
 
 
 
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT,"0.0.0.0", () => {
     console.log(`Conectado al puerto ${PORT}`);
 });

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 
-String uri = 'http://192.168.0.18:3001';
+String uri = 'http://192.168.0.5:3001';
 var logger = Logger(
   printer: PrettyPrinter(),
 );

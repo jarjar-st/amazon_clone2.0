@@ -8,6 +8,8 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_framework/responsive_row_column.dart';
 
 class ProductScreen extends StatefulWidget {
+  static const String routeName = '/products';
+
   const ProductScreen({super.key});
 
   @override
