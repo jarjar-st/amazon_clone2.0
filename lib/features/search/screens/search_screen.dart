@@ -1,32 +1,42 @@
 import 'package:amazon_clone/constants/global_varaiables.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
-import 'package:amazon_clone/features/home/widgets/carousel_images.dart';
-import 'package:amazon_clone/features/home/widgets/deal_of_day.dart';
-import 'package:amazon_clone/features/home/widgets/top_categories.dart';
-import 'package:amazon_clone/features/search/screens/search_screen.dart';
-import 'package:amazon_clone/providers/user_provider.dart';
+import 'package:amazon_clone/features/search/screens/services/search_services.dart';
+import 'package:amazon_clone/features/search/widgets/searched_product.dart';
+import 'package:amazon_clone/models/product.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:responsive_framework/responsive_row_column.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const String routeName = '/home';
-  const HomeScreen({super.key});
+class SearchScrean extends StatefulWidget {
+  static const String routeName = '/search-screen';
+  final String searchQuery;
+  const SearchScrean({super.key, required this.searchQuery});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SearchScrean> createState() => _SearchScreanState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _SearchScreanState extends State<SearchScrean> {
+  List<Product>? products;
+  SearchServices searchServices = SearchServices();
+  @override
+  void initState() {
+    super.initState();
+    fetchSearchProducts();
+  }
+
+  fetchSearchProducts() async {
+    products = await searchServices.fetchSearchedProducts(
+        context: context, searchQuery: widget.searchQuery);
+    setState(() {});
+  }
+
   void navigateToSearchScreen(String query) {
     Navigator.pushNamed(context, SearchScrean.routeName, arguments: query);
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
-    // final UserController user = Get.find<UserController>();
-    // print("HOME: ${user.user.toJson()}");
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -107,27 +117,33 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottonBar(),
-      body: const SingleChildScrollView(
-        child: ResponsiveRowColumn(
-          columnSpacing: 10,
-          layout: ResponsiveRowColumnType.COLUMN,
-          children: [
-            ResponsiveRowColumnItem(
-              child: AddressBox(),
+      body: products == null
+          ? Center(
+              child: LoadingAnimationWidget.inkDrop(
+                color: GlobalVariables.selectedNavBarColor,
+                size: 50,
+              ),
+            )
+          : ResponsiveRowColumn(
+              columnSpacing: 10,
+              layout: ResponsiveRowColumnType.COLUMN,
+              children: [
+                ResponsiveRowColumnItem(
+                  child: AddressBox(),
+                ),
+                ResponsiveRowColumnItem(
+                    child: Expanded(
+                  child: ListView.builder(
+                    itemCount: products!.length,
+                    itemBuilder: (context, index) {
+                      return SearchedProduct(
+                        product: products![index],
+                      );
+                    },
+                  ),
+                ))
+              ],
             ),
-            ResponsiveRowColumnItem(
-              child: TopCategories(),
-            ),
-            ResponsiveRowColumnItem(
-              child: CarouselImages(),
-            ),
-            ResponsiveRowColumnItem(
-              child: DealOfDay(),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

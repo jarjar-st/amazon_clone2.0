@@ -39,6 +39,21 @@ productRouter.get("/api/products", auth, async (req, res) => {
   }
 });
 
+//Busqueda de productos
+productRouter.get("/api/products/search/:search", auth, async (req, res) => {
+  try {
+    console.log(req.params.search);
+    const products = await Product.find({
+      name: {$regex: req.params.search, $options: "i"},
+    });
+
+    res.json(products);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+    console.log(e.message);
+  }
+});
+
 
 // // Borrar productos
 // productRouter.post("/admin/delete-products", admin, async (req, res) => {
