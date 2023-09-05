@@ -1,5 +1,6 @@
 import 'package:amazon_clone/constants/global_varaiables.dart';
 import 'package:amazon_clone/features/home/widgets/address_box.dart';
+import 'package:amazon_clone/features/product_details/screens/product_details_screen.dart';
 import 'package:amazon_clone/features/search/screens/services/search_services.dart';
 import 'package:amazon_clone/features/search/widgets/searched_product.dart';
 import 'package:amazon_clone/models/product.dart';
@@ -128,20 +129,30 @@ class _SearchScreanState extends State<SearchScrean> {
               columnSpacing: 10,
               layout: ResponsiveRowColumnType.COLUMN,
               children: [
-                ResponsiveRowColumnItem(
+                const ResponsiveRowColumnItem(
                   child: AddressBox(),
                 ),
                 ResponsiveRowColumnItem(
-                    child: Expanded(
-                  child: ListView.builder(
-                    itemCount: products!.length,
-                    itemBuilder: (context, index) {
-                      return SearchedProduct(
-                        product: products![index],
-                      );
-                    },
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: products!.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              ProductDetailsScreen.routeName,
+                              arguments: products![index],
+                            );
+                          },
+                          child: SearchedProduct(
+                            product: products![index],
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                ))
+                ),
               ],
             ),
     );
