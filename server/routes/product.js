@@ -55,4 +55,31 @@ productRouter.post("/api/rate-product", auth, async (req, res) => {
   }
 });
 
+//Oferta del dia
+productRouter.get("/api/deal-of-day", auth, async (req, res) => {
+  try {
+    let totalRating = 0;
+    let productRating = 0;
+    let mostRating = 0;
+    let mostRatingProduct = 0;
+    let products = await Product.find({});
+    for (let i = 0; i < products.length; i++) {
+      for (let j = 0; j < products[i].ratings.length; j++) {
+        totalRating += products[i].ratings[j].rating;
+      }
+      productRating = totalRating/products[i].ratings.length;
+      totalRating = 0;
+      if (productRating > mostRating) {
+        mostRating = productRating;
+        mostRatingProduct = i;
+      }
+
+    }
+
+    res.json(products[mostRatingProduct]);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 module.exports = productRouter;
