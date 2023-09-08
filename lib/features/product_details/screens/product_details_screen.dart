@@ -50,6 +50,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Navigator.pushNamed(context, SearchScrean.routeName, arguments: query);
   }
 
+  void addToCart() {
+    productDetailsServices.addToCart(
+      context: context,
+      product: widget.product,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,7 +227,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               child: CustomButton(
                 color: const Color.fromRGBO(254, 216, 19, 1),
                 text: "Agregar al Carrito",
-                onPressed: () {},
+                onPressed: addToCart,
               ),
             ),
             const Gap(10),

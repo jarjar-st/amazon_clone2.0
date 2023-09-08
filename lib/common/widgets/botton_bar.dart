@@ -1,9 +1,11 @@
 import 'package:amazon_clone/constants/global_varaiables.dart';
 import 'package:amazon_clone/features/account/screens/account_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
+import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:provider/provider.dart';
 
 class BottonBar extends StatefulWidget {
   static const String routeName = '/actual-home';
@@ -25,6 +27,7 @@ class _BottonBarState extends State<BottonBar> {
     ),
   ];
   Widget build(BuildContext context) {
+    final userCartLen = context.watch<UserProvider>().user.cart.length;
     return Obx(
       () => Scaffold(
         body: pages[page.value],
@@ -88,13 +91,14 @@ class _BottonBarState extends State<BottonBar> {
                     ),
                   ),
                 ),
-                child: const badges.Badge(
-                  badgeContent: Text('2'),
-                  badgeStyle: badges.BadgeStyle(
+                child: badges.Badge(
+                  badgeContent: Text(userCartLen.toString()),
+                  badgeStyle: const badges.BadgeStyle(
                     elevation: 0,
                     badgeColor: Colors.white,
                   ),
-                  child: Center(child: Icon(Icons.shopping_cart_outlined)),
+                  child:
+                      const Center(child: Icon(Icons.shopping_cart_outlined)),
                 ),
               ),
               label: '',

@@ -1,7 +1,7 @@
 const express = require("express");
 const productRouter = express.Router();
 const auth = require("../middlewares/auth");
-const Product = require("../models/product");
+const {Product} = require("../models/product");
 
 // obtner productos por categoria
 productRouter.get("/api/products", auth, async (req, res) => {
@@ -12,7 +12,7 @@ productRouter.get("/api/products", auth, async (req, res) => {
     res.json(products);
   } catch (e) {
     res.status(500).json({ error: e.message });
-    console.log(e.message);
+    console.log(`AQUIIIII ${e.message}`);
   }
 });
 

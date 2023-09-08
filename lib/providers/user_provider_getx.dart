@@ -11,6 +11,7 @@ class UserController extends GetxController {
     address: '',
     type: '',
     token: '',
+    cart: [],
   ).obs;
 
   User get user => _user.value;
