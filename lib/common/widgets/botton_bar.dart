@@ -1,5 +1,6 @@
 import 'package:amazon_clone/constants/global_varaiables.dart';
 import 'package:amazon_clone/features/account/screens/account_screen.dart';
+import 'package:amazon_clone/features/cart/screens/cart_screen.dart';
 import 'package:amazon_clone/features/home/screens/home_screen.dart';
 import 'package:amazon_clone/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +23,7 @@ class _BottonBarState extends State<BottonBar> {
   List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
-    const Center(
-      child: Text("Cart Page"),
-    ),
+    const CartScreen(),
   ];
   Widget build(BuildContext context) {
     final userCartLen = context.watch<UserProvider>().user.cart.length;
